@@ -1,0 +1,65 @@
+{% extends 'ArteNativo.html' %}
+
+{% block content %}
+
+<body>
+    <nav style="background-color: rgb(3, 31, 92);margin-top: 0.5cm;">
+        <ul>
+            <li><a href="{% url 'ListaClientes' %}">Gestión de Clientes</a></li>
+            <li><a href="#FormProductos">Gestión de Productos</a></li>
+            <li><a href="#FormVentas">Gestión de Ventas</a></li>
+            <li><a href="#FormUsuarios">Gestión de usuarios</a></li>
+        </ul>
+    </nav>
+    <h2 style="margin-top: 0,5cm;margin-bottom: 10px;">Nómina de Clientes</h2>
+    <p style="text-decoration: underline; font-weight: bold;font-size: small;font-style: italic;">Puede Filtrar la lista ID Cliente (RUT).</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <input id="IDCliente" type="text" name="filtro_ID" placeholder="RUT" onchange="Enlace()">
+        <p id="visor"></p>
+        <p><a id="EnlaceForm" href="{% url 'NominaFiltrada' Id_cliente='A' %}">Filtrar</a></p>
+    </form>
+    
+    <table border="1"; style="width: 100%;">
+        <thead>
+            <tr>
+                <th>RUT</th>
+                <th>Nombres</th>
+                <th>Apellido Paterno</th>
+                <th>Teléfono</th>
+                <th>Correo</th>
+                <th>Acciones</th> <!-- Nueva columna para acciones -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for cliente in NominaClientes %}
+            <tr>
+                <td>{{ cliente.IdCliente }}</td>
+                <td>{{ cliente.Nombres }}</td>
+                <td>{{ cliente.ApPaterno }}</td>
+                <td>{{ cliente.Telefono }}</td>
+                <td>{{ cliente.Correo }}</td>
+                <td>
+                    <a href="{% url 'editar_cliente' cliente.IdCliente %}">Editar</a></br>
+                    <a href="{% url 'eliminar_cliente' cliente.IdCliente %}">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+            <tr><button style="margin-bottom: 10px; margin-top: 10px;"><a href="{% url 'NuevoCliente' %}">Nuevo Cliente</a></button></tr>
+        </tbody>
+    </table>
+    <script>
+        function Enlace() {
+            var filtro = document.getElementById("IDCliente").value;
+            var Enlace = document.getElementById("EnlaceForm");
+
+            Enlace.href = "{% url 'NominaFiltrada' Id_cliente='A' %}".replace("A", filtro);
+            //muestra = "'" + filtro + "'";
+            //document.getElementById("visor").innerHTML = filtro + " | " + Enlace.href + " | " + muestra;
+        }
+    </script>
+<!-- Crear distintos contenedores o secciones que carguen los distintos formularios, pero que se vayan mostrando a medida que se seleccione la opción-->
+</body>
+
+{% endblock %}

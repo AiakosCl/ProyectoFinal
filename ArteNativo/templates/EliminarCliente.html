@@ -1,0 +1,14 @@
+{% extends 'ArteNativo.html' %}
+
+{% block content %}
+    <h2>Eliminar Cliente</h2>
+
+    <p>¿Estás seguro de que deseas eliminar al cliente {{ cliente.Nombres }} {{ cliente.ApPaterno }}?</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Sí, eliminar</button>
+    </form>
+
+    <a href="{% url 'ListaClientes' %}">Cancelar y volver a la lista de clientes</a>
+{% endblock %}

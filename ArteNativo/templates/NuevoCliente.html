@@ -1,0 +1,20 @@
+{% extends 'ArteNativo.html' %}
+
+{% block content %}
+<style>
+    #NuevoCliente {
+        border: 1;
+        background-color: rgb(179,195,219);
+        font-family: 'Courier New', Courier, monospace;
+        font-size: medium;
+        color:black;
+    }
+</style>
+    <h2>Nuevo Cliente</h2>
+    <form method="post" id="NuevoCliente">
+        {% csrf_token %}
+        <table>{{ form.as_table }}</table>
+        <button type="submit">Guardar Cliente</button></br>
+        <p><a href="{% url 'ListaClientes' %}">Volver a Nómina de Clientes...</a></p>
+    </form>
+{% endblock %}

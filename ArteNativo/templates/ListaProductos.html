@@ -1,0 +1,44 @@
+<!-- gestion_productos.html -->
+
+{% extends 'ArteNativo.html' %}
+
+{% block content %}
+
+<div id="Menu">
+    <nav id="BarraProductos" style="background-color: rgb(51, 35, 0);margin-bottom: 5px;">
+        <ul>
+            <li><a href="{% url 'ListaProductoFiltrada' tipo_producto='A' %}">Dormitorio</a></li>
+            <li><a href="{% url 'ListaProductoFiltrada' tipo_producto='B' %}">Sala</a></li>
+            <li><a href="{% url 'ListaProductoFiltrada' tipo_producto='C' %}">Comedor</a></li>
+            <li><a href="{% url 'ListaProductoFiltrada' tipo_producto='D' %}">Cocina</a></li>
+            <li><a href="{% url 'ListaProductoFiltrada' tipo_producto='E' %}">Exteriores</a></li>
+            <li><a href="{% url 'ListaProductoFiltrada' tipo_producto='F' %}">Decoración</a></li>
+            <li style="float:right;"><a href="{% url 'ListaProducto' %}">Todos</a></li>
+        </ul>
+    </nav>
+</div>
+<p style="text-decoration: underline; font-weight: bold;font-size: small;font-style: italic;margin-bottom: 10px;">Haga en la opción del menú para filtrar por habitación.</p>
+<h2>Nuestros Productos</h2>
+<div>
+    <table border="1" style="margin-top: 15px;">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>ID Producto</th>
+                <th>Descripción</th>
+                <th>Tipo/Área</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in productos %}
+                <tr>
+                    <td><img src= '{{producto.ImagenProducto.url}}' alt="{{producto.IdProducto}}" width="200" height="200"></td>
+                    <td>{{ producto.IdProducto }}</td>
+                    <td>{{ producto.Descripcion|safe}}</td>
+                    <td>{{ producto.get_TipoProducto_display}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

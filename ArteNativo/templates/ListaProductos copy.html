@@ -1,0 +1,41 @@
+<!-- gestion_productos.html -->
+
+{% extends 'ArteNativo.html' %}
+
+{% block content %}
+  <h2>Gestión de Productos</h2>
+
+  <form method="post">
+    {% csrf_token %}
+    <input type="text" name="filtro_nombre" placeholder="Nombre del Producto">
+    <button type="submit">Filtrar</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Imagen</th>
+        <th>Precio Unitario</th>
+        <th>Descripción</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for producto in productos %}
+        <tr>
+          <td>{{ producto.IdProducto }}</td>
+          <td>{{ producto.NombreProducto }}</td>
+          <td><img src="{{ producto.ImagenProducto.url }}" alt="{{ producto.NombreProducto }}" width="50"></td>
+          <td>${{ producto.PrecioUnitario }}</td>
+          <td>{{ producto.Descripcion }}</td>
+          <td>
+            <a href="{% url 'editar_producto' producto.IdProducto %}">Editar</a>
+            <a href="{% url 'eliminar_producto' producto.IdProducto %}">Eliminar</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
