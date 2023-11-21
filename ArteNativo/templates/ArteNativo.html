@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
-{% load static %}
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ArteNativo: Muebles a tu medida</title>
+    {% load static %}
     <style>
         * {
             margin: 0;
@@ -22,10 +18,11 @@
         }
 
         nav {
-            background-color: #333;
-            float: none;
+            background-color: rgb(89, 48, 1);
+            float:none;
             border: white;
             border-style: outset;
+            width: 100%;
         }
 
         nav ul {
@@ -50,6 +47,7 @@
         nav a:hover {
             background-color: #ddd;
             color: black;
+            font-weight: bold;
         }
 
         header {
@@ -68,98 +66,164 @@
             width: 90%;
             margin: 0 auto;
             display:block;
-            justify-content: center;
-            align-items: center;
             height: 100vh;
+            align-items: center;
+            text-align: center;
+        }
+
+        button {
+            background-color: rgb(243, 176, 99);
+            color: white;
+            border-radius: 8px;
+            font-size: large;
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: background-color 0,3s ease;
+            width: 200px;
+            height: 50px;
+        }
+
+        button:hover {
+            background-color: #fefefe;
+            color:#000000;
+        }
+
+        #Contenido {
+            width: 100%;
+            display: flexbox;
+            align-items: center;
+            justify-content: center;
+        }
+
+        ul.messages {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+        }
+
+        .messages li {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        /* Estilos específicos para cada tipo de mensaje */
+        .messages li.success {
+            background-color: #dff0d8; /* Verde para mensajes de éxito */
+            border: 1px solid #d0e9c6;
+            color: #3c763d;
+        }
+
+        .messages li.error {
+            background-color: #f2dede; /* Rojo para mensajes de error */
+            border: 1px solid #ebccd1;
+            color: #a94442;
+        }
+
+        .messages li.warning {
+            background-color: #fcf8e3; /* Amarillo para mensajes de advertencia */
+            border: 1px solid #faebcc;
+            color: #8a6d3b;
+        }
+
+        .messages li.info {
+            background-color: #d9edf7; /* Azul claro para mensajes de información */
+            border: 1px solid #bce8f1;
+            color: #31708f;
         }
 
 
     </style>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ArteNativo: Muebles a tu medida</title>
+    </head>
     <body>
         <nav>
-        <ul>
-            <li><a href="{% url 'ListaProducto' %}">Inicio</a></li>
-            <li><a onclick="MostrarAcercaDe()">Acerca de</a></li>
-            <li><a href="#contacto">Contacto</a></li>
-            {% if user.is_authenticated %}
-                <li><a href="{% url 'administracion' %}">Administración</a></li>
-                <li><a href="#Registrar Venta">Registar Venta</a></li>
-                <li style="float: right;"><a href="{% url 'salir' %}">Salir</a></li>
-            {% else %}
-                <li style="float: right;"><a href="{% url 'entrar' %}">Entrar</a></li>
-            {% endif %}
+            <ul>
+                <li><a href="{% url 'ListaProducto' %}">Inicio</a></li>
+                <li><a onclick="MostrarAcercaDe()">Acerca de</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'administracion' %}">Administración</a></li>
+                    <li><a href="#Registrar Venta">Registar Venta</a></li>
+                    <li style="float: right;"><a href="{% url 'salir' %}">Salir</a></li>
+                {% else %}
+                    <li style="float: right;"><a href="{% url 'entrar' %}">Entrar</a></li>
+                {% endif %}
 
-        </ul>
+            </ul>
         </nav>
 
-    <header style="background-image: url({% static 'img/cabecera.jpg' %});">
-        <span style="font-size:26pt; font-family:'Arial Black', Gadget, sans-serif; color:#fefefe; text-shadow: 2px 2px 2px #000000; ">ArteNativo</span>
-        <h1 style="color: rgb(1, 89, 46);text-shadow: 2px 2px 2px #000000;">Tú lo imaginas, nosotros lo hacemos.</h1>
-        {% if user.is_authenticated %}
-            <p style="color: rgb(89, 48, 1);text-shadow: 2px 2px 2px #000000;font-size: 24pt;"> Bienvenido, {{user.first_name}}.</p>
-        {% endif %}
-    </header>
-    
-<!-- Sección Menú Mostrar Productos-->
-    <section id="formularios">
 
-        <div id="Contenido">
-            <p>{% block content %}{% endblock %}</p>
-        </div>
-    </section>
-    
-    
+        <header style="background-image: url({% static 'img/cabecera.jpg' %});">
+            <span style="font-size:26pt; font-family:'Arial Black', Gadget, sans-serif; color:#fefefe; text-shadow: 2px 2px 2px #000000; ">ArteNativo</span>
+            <h1 style="color: rgb(1, 89, 46);text-shadow: 2px 2px 2px #000000;">Tú lo imaginas, nosotros lo hacemos.</h1>
+            {% if user.is_authenticated %}
+                <p style="color: rgb(89, 48, 1);text-shadow: 2px 2px 2px #000000;font-size: 24pt;"> Bienvenido, {{user.first_name}}.</p>
+            {% endif %}
+        </header>
+
+    <!-- Sección Menú Mostrar Productos-->
+        <section id="formularios">
+
+            <div id="Contenido">
+                <p>{% block content %}{% endblock %}</p>
+            </div>
+        </section>
+
+
     <!--Este es el container que mostrará los distintos formularios de gestión-->
 
     <!-- Este es la sección de Acerca de que aparecerá cuando se seleccione la opción -->
-    <section id="acerca_de">
-        <div class="container">
-            <h2 style="font-size:26pt; font-family:'Arial Black', Gadget, sans-serif; color:#fefefe; text-shadow: 2px 2px 2px #000000; ">Acerda de...</h2>
-            <p style="text-align: justify; font-family: Arial, Helvetica, sans-serif;font-size: large;"></br></br></br>
-                Como una empresa familiar, con más de 20 años de experiencia en la fabricación de muebles a medida
-                con gran dedicación al detalle, y con entendimiento muy claro de nuestro dicho: Tú lo imaginas, nosotros lo hacemos.</br></br>
-                Nos destacamos por utilizar materiales de calidad, y trabajamos en casi todas las maderas, según definas y tengas planeado.</br></br>
-                No dudes en contactarnos para hacer tus consultas, y llevar tus sueño a hacerlos realidad.</br></br></br>
-                <span style="font-size:26pt; font-family:'Arial Black', Gadget, sans-serif; color:#fefefe; text-shadow: 2px 2px 2px #000000; ">¡Bienvenidos a ArteNativo!</span>
-            </p>
-        </div>
-    </section>
+        <section id="acerca_de" style="margin-top: 15px;">
+            <div class="container" style="border-radius: 8px; border-style: double;background-color: rgb(205, 202, 202);">
+                <h2 style="font-size:26pt; font-family:'Arial Black', Gadget, sans-serif; color:rgb(1, 89, 46); text-shadow: 2px 2px 2px #000000; width: 100%;text-align: left;">Acerca de...</h2>
+                <p style="text-align: justify; font-family: Arial, Helvetica, sans-serif;font-size: large;"></br></br></br>
+                    Como una empresa familiar, con más de 20 años de experiencia en la fabricación de muebles a medida
+                    con gran dedicación al detalle, y con entendimiento muy claro de nuestro dicho: Tú lo imaginas, nosotros lo hacemos.</br></br>
+                    Nos destacamos por utilizar materiales de calidad, y trabajamos en casi todas las maderas, según definas y tengas planeado.</br></br>
+                    No dudes en contactarnos para hacer tus consultas, y llevar tus sueño a hacerlos realidad.</br></br></br>
+                    <span style="font-size:26pt; font-family:'Arial Black', Gadget, sans-serif; color:#fefefe; text-shadow: 2px 2px 2px #000000; ">¡Bienvenidos a ArteNativo!</span>
+                </p>
+            </div>
+        </section>
 
     <!-- Función para cambiar el estado de visibilidad de la sección acerca de-->
-    <script>
-        function MostrarAcercaDe() {
-            var EstadoSeccion = document.getElementById("acerca_de");
-            var EstadoFormularios = document.getElementById("formularios");
+        <script>
+            function MostrarAcercaDe() {
+                var EstadoSeccion = document.getElementById("acerca_de");
+                var EstadoFormularios = document.getElementById("formularios");
 
-            EstadoFormularios.style.display = 'none';
-            //EstadoSeccion.style.display="block"; EstadoFormularios.style.display="none";
-            EstadoSeccion.style.display=(EstadoSeccion.style.display === "block") ? "none": "block";
-        }
-    </script>
+                EstadoFormularios.style.display = 'none';
+                //EstadoSeccion.style.display="block"; EstadoFormularios.style.display="none";
+                EstadoSeccion.style.display=(EstadoSeccion.style.display === "block") ? "none": "block";
+            }
+        </script>
 
-    <script>
-        function OcultarBarra() {
-            document.getElementById("Menu").style.display="none";
-        }
-    </script>
+        <script>
+            function OcultarBarra() {
+                document.getElementById("Menu").style.display="none";
+            }
+        </script>
 
-    <script>
-        function MostrarBarra() {
-            document.getElementById("Menu").style.display="block";
-        }
-    </script>
+        <script>
+            function MostrarBarra() {
+                document.getElementById("Menu").style.display="block";
+            }
+        </script>
 
-    <script>
-        function MostrarFormulario() {
-            document.getElementById("acerca_de").style.display="none";
-            document.getElementById("formularios").style.display="block";
-            document.getElementById("Menu").style.display="none";
-        }
-    </script>
+        <script>
+            function MostrarFormulario() {
+                document.getElementById("acerca_de").style.display="none";
+                document.getElementById("formularios").style.display="block";
+                document.getElementById("Menu").style.display="none";
+            }
+        </script>
 
-    
-    
-    
+        
+        
+        
     </body>
 </html>

@@ -12,6 +12,7 @@ from django.contrib.auth.forms import *
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 
 
 
@@ -31,8 +32,13 @@ class ProductoListView(ListView):
     model = Productos
     template_name = "ListaProductos.html"
     context_object_name = 'productos'
+    
+class TablaListView(ListView):
+    model = Productos
+    template_name = "TablaProductos.html"
+    context_object_name = 'ListadeProductos'
 
-class ClienteListView(LoginRequiredMixin,ListView):
+class ClienteListView(ListView):
     model = Clientes
     template_name = 'ListaClientes.html'
     context_object_name = 'NominaClientes'
@@ -45,7 +51,6 @@ def presentacion(request, tipo_producto=None): # Para filtrar la lista de produc
         
     context = {'productos': productos}
     return render(request, 'ListaProductos.html',context)
-
 
 def FiltroClientes(request, Id_cliente=None):
     if Id_cliente:
@@ -66,9 +71,10 @@ def crear_cliente(request):
         form = ClienteForm(request.POST)
         if form.is_valid():
             form.save()
-            print('Se ha creado el nuevo cliente')
+            messages.success(request, '¡Cliente ha sido creado con éxito!')
             return redirect('ListaClientes')  # Redirige a la lista de clientes después de crear uno nuevo
     else:
+        messages.error(request, 'Error al crear al cliente, revisar los datos ingresados.')
         form = ClienteForm()
 
     return render(request, 'NuevoCliente.html', {'form': form})
@@ -117,29 +123,38 @@ def crear_detalle_venta(request):
 
     return render(request, 'crear_detalle_venta.html', {'form': form})
 
+def agregar_al_carrito(request, producto_id): #Crear Carrito de Compras para lanzar cotización.
+    if request.method == 'POST':
+        producto = Productos.objects.get(pk=producto_id)
+        cantidad = request.POST.get('cantidad', 1)  # Puedes ajustar cómo manejas la cantidad
 
+        # Verificar si el elemento ya está en el carrito
+        carrito_item, creado = CArritoItem.objects.get_or_create(
+            user=request.user,
+            producto=producto
+        )
 
+        # Si ya está en el carrito, aumentar la cantidad
+        if not creado:
+            carrito_item.cantidad += int(cantidad)
+            carrito_item.save()
+
+    return redirect('ListaProducto')
+
+def ver_carrito(request):
+    carrito_items = CArritoItem.objects.filter(user = request.user)
+    return render(request, 'carrito.html', {'carrito_item':carrito_items})
 
 
 
 #Vistas para editar tablas
 
-class EditarClienteView(View):
+class ClienteUpdateView(UpdateView):
+    model = Clientes
     template_name = 'EditarCliente.html'
-
-    def get(self, request, pk, *args, **kwargs):
-        cliente = get_object_or_404(Clientes, pk=pk)
-        form = ClienteForm(instance=cliente)
-        return render(request, self.template_name, {'form': form, 'cliente': cliente})
-
-    def post(self, request, pk, *args, **kwargs):
-        cliente = get_object_or_404(Clientes, pk=pk)
-        form = ClienteForm(request.POST, instance=cliente)
-        if form.is_valid():
-            form.save()
-            return redirect('ListaClientes')
-        return render(request, self.template_name, {'form': form, 'cliente': cliente})
-
+    form_class = ClienteForm
+    success_url = reverse_lazy('ListaClientes')
+    
 
 class EliminarClienteView(View):
     template_name = 'EliminarCliente.html'
@@ -151,7 +166,14 @@ class EliminarClienteView(View):
     def post(self, request, pk, *args, **kwargs):
         cliente = get_object_or_404(Clientes, pk=pk)
         cliente.delete()
+        messages.warning(request, 'Se eliminó el registro del cliente.')
         return redirect('ListaClientes')
+
+class ProductoEditar(UpdateView):
+    model =Productos
+    template_name = 'EditarProducto.html'
+    form_class = ProductoForm
+    success_url = reverse_lazy('TablaProductos')
 
 
 

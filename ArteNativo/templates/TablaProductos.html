@@ -1,0 +1,41 @@
+{% extends 'ArteNativo.html' %}
+
+{% block content %}
+<form method="post">
+<body>
+    <nav style="background-color: rgb(1, 89, 46);margin-top: 0.5cm;">
+        <ul>
+            <li><a href="{% url 'ListaClientes' %}">Gestión de Clientes</a></li>
+            <li><a href="{% url 'TablaProductos' %}">Gestión de Productos</a></li>
+            <li><a href="#FormVentas">Gestión de Ventas</a></li>
+            <li><a href="#FormUsuarios">Gestión de usuarios</a></li>
+        </ul>
+    </nav>
+    <h2>Lista Productos</h2>
+    <div>
+        <table border="1" style="margin-top: 15px;width: 100%;">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Código</th>
+                    <th>Descripción</th>
+                    <th>Habitación</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in ListadeProductos %}
+                    <tr>
+                        <td><img src= '{{producto.ImagenProducto.url}}' alt="{{producto.IdProducto}}" width="200" height="200"></td>
+                        <td>{{ producto.IdProducto }}</td>
+                        <td>{{ producto.Descripcion|safe}}</td>
+                        <td>{{ producto.get_TipoProducto_display}}</td>
+                        <td><a href="{% url 'EditarProductoForm' producto.IdProducto %}">Actualizar</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</form>
+{% endblock %}

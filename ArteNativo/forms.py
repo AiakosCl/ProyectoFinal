@@ -1,5 +1,6 @@
 from django import forms
 from .models import *
+from ckeditor.widgets import CKEditorWidget
 
 class ClienteForm(forms.ModelForm):
     class Meta:
@@ -13,6 +14,7 @@ class ClienteForm(forms.ModelForm):
             'ApMaterno':'Apellido Materno',
             'IdCliente':'RUT',
             'CondPago':'Condición de Pago',
+            'FechaNacimiento': 'Fecha de Nacimiento',
             
         }
         
@@ -21,6 +23,18 @@ class ProductoForm(forms.ModelForm):
     class Meta:
         model = Productos
         fields = '__all__'
+        widgets = {
+            'Descripcion': CKEditorWidget(),
+        }
+        labels = {
+            'IdProducto': 'Código del Producto',
+            'NombreProducto': 'Nombre del Producto',
+            'Tipo':'Habitación / Sector',
+            'ImagenProducto': 'Imagen referencial',
+            'PrecioUnitario': 'Precio Base',
+            'Descripcion': 'Descripción del Producto',
+            'EstadoProducto': 'Activo / Inactivo',
+        }
 
 class VentaForm(forms.ModelForm):
     class Meta:

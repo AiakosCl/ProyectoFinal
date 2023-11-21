@@ -1,5 +1,6 @@
 from django.db import models, IntegrityError
 from ckeditor.fields import RichTextField
+from django.contrib.auth.models import User
 
 
 # Create your models here.
@@ -32,6 +33,10 @@ class Productos(models.Model):
         ('F', 'Decoración')
         
     )
+    Estados = (
+        (True, 'Activo'),
+        (False, 'Inactivo')
+    )
     IdProducto = models.CharField(max_length=10, primary_key=True, help_text='Ingrese el Nro. de Modelo')
     NombreProducto = models.CharField(max_length=50, blank=False, null=False, default='Descripción corta', help_text='Ingrese una descripción breve del producto')
     TipoProducto = models.CharField(max_length=1, choices=tipo, null=False, blank=False,default='B')
@@ -39,6 +44,7 @@ class Productos(models.Model):
     PrecioUnitario = models.DecimalField(max_digits=8, default=0, decimal_places=2, help_text='Ingrese precio unitario neto')
     Stock = models.IntegerField(blank=False, null=False, default=0)
     Descripcion = RichTextField(blank=True, null=True, help_text='Haga una presentación del producto.')
+    EstadoProducto = models.BooleanField(blank=False, null=False, choices=Estados, default=True)
     
 
 class Ventas(models.Model):
@@ -67,5 +73,12 @@ class DetalleVenta(models.Model):
         PrecioImportado = self.IdProducto.PrecioUnitario
         self.PrecioLinea = PrecioImportado
         self.save()
+        
+
+class CArritoItem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    CodProducto = models.ForeignKey(Productos, on_delete=models.CASCADE)
+    Cantidad = models.PositiveIntegerField(default=1)
+
 
 

@@ -3,10 +3,10 @@
 {% block content %}
 
 <body>
-    <nav style="background-color: rgb(3, 31, 92);margin-top: 0.5cm;">
+    <nav style="background-color: rgb(1, 89, 46);margin-top: 0.5cm;">
         <ul>
             <li><a href="{% url 'ListaClientes' %}">Gestión de Clientes</a></li>
-            <li><a href="#FormProductos">Gestión de Productos</a></li>
+            <li><a href="{% url 'TablaProductos' %}">Gestión de Productos</a></li>
             <li><a href="#FormVentas">Gestión de Ventas</a></li>
             <li><a href="#FormUsuarios">Gestión de usuarios</a></li>
         </ul>
@@ -14,13 +14,24 @@
     <h2 style="margin-top: 0,5cm;margin-bottom: 10px;">Nómina de Clientes</h2>
     <p style="text-decoration: underline; font-weight: bold;font-size: small;font-style: italic;">Puede Filtrar la lista ID Cliente (RUT).</p>
 
+    <!-- Barra de filtros para la lista de Clientes -->
     <form method="post">
         {% csrf_token %}
-        <input id="IDCliente" type="text" name="filtro_ID" placeholder="RUT" onchange="Enlace()">
+        <input id="IDCliente" type="text" name="filtro_ID" placeholder="RUT" onchange="Enlace()" style="font-size: large;">
         <p id="visor"></p>
         <p><a id="EnlaceForm" href="{% url 'NominaFiltrada' Id_cliente='A' %}">Filtrar</a></p>
     </form>
     
+    <!-- Entregará el mensaje de confirmación de la creación o edición del registro- Cliente -->
+    {% if messages %}
+    <ul class="messages">
+    {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+
+    <!-- Tabla que mostrará la lista de clientes con las opciones de editar y eliminar por línea -->
     <table border="1"; style="width: 100%;">
         <thead>
             <tr>
@@ -49,17 +60,17 @@
             <tr><button style="margin-bottom: 10px; margin-top: 10px;"><a href="{% url 'NuevoCliente' %}">Nuevo Cliente</a></button></tr>
         </tbody>
     </table>
+    
     <script>
+        //Esta función modifica el atributo href de la acción <a id=EnlaceForm>
         function Enlace() {
             var filtro = document.getElementById("IDCliente").value;
             var Enlace = document.getElementById("EnlaceForm");
 
             Enlace.href = "{% url 'NominaFiltrada' Id_cliente='A' %}".replace("A", filtro);
-            //muestra = "'" + filtro + "'";
-            //document.getElementById("visor").innerHTML = filtro + " | " + Enlace.href + " | " + muestra;
         }
     </script>
-<!-- Crear distintos contenedores o secciones que carguen los distintos formularios, pero que se vayan mostrando a medida que se seleccione la opción-->
+
 </body>
 
 {% endblock %}

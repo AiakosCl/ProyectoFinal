@@ -1,14 +1,42 @@
 {% extends 'ArteNativo.html' %}
 
 {% block content %}
-    <h2>Eliminar Cliente</h2>
+<style>
+    div {
+        width: 100%;
+        display: flexbox;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        border-color: red;
+        border-style: dashed;
+    }
 
+    button {
+        width: 300px;
+    }
+
+    table {
+        width: 100%;
+    }
+</style>
+<div>
+    <h2>Eliminar Cliente</h2>
+    </br></br>
     <p>¿Estás seguro de que deseas eliminar al cliente {{ cliente.Nombres }} {{ cliente.ApPaterno }}?</p>
 
     <form method="post">
         {% csrf_token %}
-        <button type="submit">Sí, eliminar</button>
+    </br></br>
+        <table>
+            <tr>
+                <td><button type="submit">SÍ - Eliminar registro</button></td>
+                <td><button><a href="{% url 'ListaClientes' %}">NO - Volver a la lista</a></button></td>
+            </tr>
+        </table>
+              
     </form>
+    </br></br>
 
-    <a href="{% url 'ListaClientes' %}">Cancelar y volver a la lista de clientes</a>
+</div>
 {% endblock %}

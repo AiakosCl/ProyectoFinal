@@ -1,0 +1,17 @@
+{% extends 'ArteNativo.html' %}
+
+{% block content %}
+    <h1>Carrito de Compras</h1>
+
+    {% if carrito_items %}
+        <ul>
+        {% for item in carrito_items %}
+            <li>
+            {{ item.producto.NombreProducto }} - Cantidad: {{ item.cantidad }}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>El carrito está vacío.</p>
+    {% endif %}
+{% endblock %}

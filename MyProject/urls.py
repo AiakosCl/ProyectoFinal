@@ -33,8 +33,10 @@ urlpatterns = [
     path('NuevoCliente/', views.crear_cliente, name="NuevoCliente"),
     path('Clientes/', views.ClienteListView.as_view(), name='ListaClientes'),
     path('Clientes/<str:Id_cliente>/', views.FiltroClientes, name="NominaFiltrada"),
-    path('Clientes/editar/<str:pk>/', views.EditarClienteView.as_view(), name='editar_cliente'),
+    path('Clientes/editar/<str:pk>/', views.ClienteUpdateView.as_view(), name='editar_cliente'),
     path('Clientes/eliminar/<str:pk>/', views.EliminarClienteView.as_view(), name='eliminar_cliente'),
+    path('ListaProductos/', views.TablaListView.as_view(), name="TablaProductos"),
+    path('ListaProductos/editar/<str:pk>/', views.ProductoEditar.as_view(), name='EditarProductoForm'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
