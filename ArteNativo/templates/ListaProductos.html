@@ -45,8 +45,8 @@
 <div class="grid-container">
     {% for producto in productos %}
     <div class="grid-item">
-        <img src="{{ producto.ImagenProducto.url }}" alt="{{ producto.NombreProducto }}">
-        <p>{{ producto.NombreProducto }}</p>
+        <img src="{{ producto.ImagenProducto.url }}" alt="{{ producto.NombreProducto }}" data-toggle="tooltip" data-placement="top" title="{{producto.IdProducto}} - {{producto.NombreProducto}} - {{producto.PrecioUnitario}}">
+        <p><strong>{{ producto.NombreProducto }}</strong></p>
     </div>
     {% endfor %}
 </div>

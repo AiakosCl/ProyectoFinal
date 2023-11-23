@@ -1,4 +1,6 @@
 import datetime
+from typing import Any
+from django.db import models
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
@@ -21,7 +23,7 @@ from django.contrib import messages
 def index(request):
     return render(request, 'ArteNativo.html')
 
-@login_required(login_url='entrar')
+@login_required
 def administracion(request):
     return render(request, 'administracion.html')
 
@@ -33,12 +35,12 @@ class ProductoListView(ListView):
     template_name = "ListaProductos.html"
     context_object_name = 'productos'
     
-class TablaListView(ListView):
+class TablaListView(LoginRequiredMixin, ListView):
     model = Productos
     template_name = "TablaProductos.html"
     context_object_name = 'ListadeProductos'
 
-class ClienteListView(ListView):
+class ClienteListView(LoginRequiredMixin,ListView):
     model = Clientes
     template_name = 'ListaClientes.html'
     context_object_name = 'NominaClientes'
@@ -52,20 +54,31 @@ def presentacion(request, tipo_producto=None): # Para filtrar la lista de produc
     context = {'productos': productos}
     return render(request, 'ListaProductos.html',context)
 
+@login_required
 def FiltroClientes(request, Id_cliente=None):
     if Id_cliente:
-        clientes = Clientes.objects.filter(IdCliente = Id_cliente)
+        clientes = Clientes.objects.filter(IdCliente__startswith = Id_cliente)
     else:
         clientes = Productos.objects.all()
     
     context = {'NominaClientes': clientes}
     return render(request, 'ListaClientes.html', context)
 
+@login_required
+def FiltroTablaProductos(request, id_producto=None):
+    if id_producto:
+        ListaFiltadaProductos = Productos.objects.filter(IdProducto__startswith = id_producto)
+    else:
+        ListaFiltadaProductos = Productos.objects.all()
+    
+    Contexto = {'ListadeProductos': ListaFiltadaProductos}
+    return render(request, 'TablaProductos.html', Contexto)
+
 
 
 
 # Vistas para crear Clientes, Productos, Ventas, etc.
-@login_required(login_url='entrar')
+@login_required
 def crear_cliente(request):
     if request.method == 'POST':
         form = ClienteForm(request.POST)
@@ -74,10 +87,9 @@ def crear_cliente(request):
             messages.success(request, '¡Cliente ha sido creado con éxito!')
             return redirect('ListaClientes')  # Redirige a la lista de clientes después de crear uno nuevo
     else:
-        messages.error(request, 'Error al crear al cliente, revisar los datos ingresados.')
         form = ClienteForm()
 
-    return render(request, 'NuevoCliente.html', {'form': form})
+    return render(request, 'Form_Clientes.html', {'form': form})
 
 @login_required(login_url='entrar')
 def crear_producto(request):
@@ -85,11 +97,11 @@ def crear_producto(request):
         form = ProductoForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('lista_productos')  # Redirige a la lista de productos después de crear uno nuevo
+            return redirect('TablaProductos')  # Redirige a la lista de productos después de crear uno nuevo
     else:
         form = ProductoForm()
 
-    return render(request, 'crear_producto.html', {'form': form})
+    return render(request, 'Form_Productos.html', {'form': form})
 
 @login_required(login_url='entrar')
 def crear_venta(request):
@@ -149,14 +161,30 @@ def ver_carrito(request):
 
 #Vistas para editar tablas
 
-class ClienteUpdateView(UpdateView):
-    model = Clientes
-    template_name = 'EditarCliente.html'
-    form_class = ClienteForm
-    success_url = reverse_lazy('ListaClientes')
-    
+# class ClienteUpdateView(UpdateView): #La forma fácil para editar un registro con UpdateView
+#     model = Clientes
+#     template_name = 'EditarCliente.html'
+#     form_class = ClienteForm
+#     success_url = reverse_lazy('ListaClientes')
 
-class EliminarClienteView(View):
+class EditarClienteView(LoginRequiredMixin, View): #Forma para editar utilizando View
+    template_name = 'Form_Clientes.html'
+
+    def get(self, request, pk, *args, **kwargs):
+        cliente = get_object_or_404(Clientes, pk=pk)
+        form = ClienteForm(instance=cliente)
+        return render(request, self.template_name, {'form': form, 'cliente': cliente})
+
+    def post(self, request, pk, *args, **kwargs):
+        cliente = get_object_or_404(Clientes, pk=pk)
+        form = ClienteForm(request.POST, instance=cliente)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'¡Información de {cliente.Nombres} actualizada con éxito!')
+            return redirect('ListaClientes')
+        return render(request, self.template_name, {'form': form, 'cliente': cliente})    
+
+class EliminarClienteView(LoginRequiredMixin,View):
     template_name = 'EliminarCliente.html'
 
     def get(self, request, pk, *args, **kwargs):
@@ -169,11 +197,26 @@ class EliminarClienteView(View):
         messages.warning(request, 'Se eliminó el registro del cliente.')
         return redirect('ListaClientes')
 
-class ProductoEditar(UpdateView):
+class ProductoEditar(LoginRequiredMixin, UpdateView): #Revisar si se programa la vista como View
     model =Productos
-    template_name = 'EditarProducto.html'
+    template_name = 'Form_Productos.html'
     form_class = ProductoForm
     success_url = reverse_lazy('TablaProductos')
+
+class EliminarProductoView(LoginRequiredMixin,View):
+    template_name = 'EliminarProducto.html'
+
+    def get(self, request, pk, *args, **kwargs):
+        ProductoEliminar = get_object_or_404(Productos, pk=pk)
+        return render(request, self.template_name, {'producto': ProductoEliminar})
+
+    def post(self, request, pk, *args, **kwargs):
+        ProductoEliminar = get_object_or_404(Productos, pk=pk)
+        ProductoEliminar.delete()
+        messages.warning(request, f'Se ha eliminado el producto: {ProductoEliminar.NombreProducto}.')
+        return redirect('TablaProductos')
+
+    
 
 
 
@@ -207,4 +250,13 @@ def user_register(request):
             return redirect('entrar')
     else:
         form = UserCreationForm()
-    return render(request, 'register.html', {'form': form})
+    return render(request, 'Form_Usuario.html', {'form': form})
+
+class EditarUsuario(LoginRequiredMixin, UpdateView):
+    model = User
+    form_class = EditarUsuarioForm
+    template_name = 'Form_Usuario.html'
+    success_url = reverse_lazy('administracion')
+
+    def get_object(self, queryset=None):
+        return self.request.user

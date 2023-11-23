@@ -1,0 +1,14 @@
+{% extends "ArteNativo.html" %}
+
+{% block content %}
+    <h1>Formualario Usuario</h1>
+    <form method="post">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+
+        <button type="submit">Guardar Cambios</button>
+    </form>
+    <a href="{% url 'entrar' %}">Iniciar Sesión</a>
+{% endblock %}

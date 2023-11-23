@@ -1,0 +1,55 @@
+{% extends 'ArteNativo.html' %}
+
+{% block content %}
+<script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
+
+<style>
+    table {
+        font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        font-size: medium;
+        color: black;
+        text-align: left;
+        width: 100%;
+
+    }
+
+    #contenedor-formulario {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    form {
+        font-size: larger;
+        border: 1;
+        border-style: dotted;
+        border-radius: 8px;
+        width: 90%;
+    }
+</style>
+<div id="contenedor-formulario">
+    <form method="post" enctype="multipart/form-data">
+        <h2 style="font-style: italic;">Formulario Productos</br></br></h2>
+        {% csrf_token %}
+        <table border="1">
+            <tr>
+                <td><img src='{{producto.ImagenProducto.url}}' alt="Imagen referencial"></td>
+                <td>{{ form.as_table }}</td>
+            </tr>
+            <tr>
+                <td><p style="font-weight: bold;">Acciones --></p></td>
+                <td style="text-align: center;"><button type="submit" style="background-color: green;">Guardar Cambios</button>
+                    <button><a href="{% url 'TablaProductos' %}"></a>Volver a la Lista -></button></td>
+            </tr>
+        </table>
+    </form>
+    </br>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        CKEDITOR.replaceAll();
+    });
+</script>
+{% endblock %}

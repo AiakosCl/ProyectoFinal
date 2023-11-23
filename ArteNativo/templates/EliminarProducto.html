@@ -1,0 +1,41 @@
+{% extends 'ArteNativo.html' %}
+
+{% block content %}
+<style>
+    div {
+        width: 100%;
+        display: flexbox;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        border-color: red;
+        border-style: dashed;
+    }
+
+    button {
+        width: 300px;
+    }
+
+    table {
+        width: 100%;
+    }
+</style>
+<div>
+    <h2>Eliminar Cliente</h2>
+    </br></br>
+    <p>¿Estás seguro de que deseas eliminar producto {{ producto.IdProducto }} - {{ producto.NombreProducto }}?</p>
+
+    <form method="post">
+        {% csrf_token %}
+    </br></br>
+        <table>
+            <tr>
+                <td><button type="submit" style="background-color: red;">SÍ - Eliminar registro</button></td>
+                <td><button><a href="{% url 'TablaProductos' %}">NO - Volver a la lista</a></button></td>
+            </tr>
+        </table>
+    </form>
+    </br></br>
+
+</div>
+{% endblock %}

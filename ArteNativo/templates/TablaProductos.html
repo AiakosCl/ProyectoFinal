@@ -11,9 +11,29 @@
             <li><a href="#FormUsuarios">Gestión de usuarios</a></li>
         </ul>
     </nav>
-    <h2>Lista Productos</h2>
+
+    <form method="post" id="Buscador">
+        <h2>Lista Productos</h2>
+        <br><br>
+        
+        <div style="width: 100%;text-align: center;vertical-align: middle;margin-left: 30%;">
+            <table style="width: 50%;background-color: azure;">
+                <tr>
+                    <td><p style="text-align: left; text-decoration: underline; font-weight: bold;font-size:larger;font-style: italic;">Ingrese Código:</p></td>
+                    <td>&nbsp;</td>   
+                    <td><input id="id_Producto" type="text" name="filtro_ID" placeholder="Código del Producto" onchange="Enlace()" style="font-size: large; background-color: beige;"></td>
+                </tr>
+                <tr>           
+                    <td><a href="{% url 'TablaProductos' %}">Todos los productos</a></td>
+                    <td>&nbsp;</td>   
+                    <td><a id="EnlaceForm" href="{% url 'ProductoFiltrado' id_producto='A1' %}">Filtrar</a></td>
+                </tr>
+            </table>
+            <p id="visor"></p>
+        </div>
+    </form>
     <div>
-        <table border="1" style="margin-top: 15px;width: 100%;">
+        <table border="1" cellpadding = "1" cellspacing="1" style="margin-top: 15px;width: 100%;border-color: rgb(236, 234, 234);">
             <thead>
                 <tr>
                     <th>Producto</th>
@@ -30,12 +50,25 @@
                         <td>{{ producto.IdProducto }}</td>
                         <td>{{ producto.Descripcion|safe}}</td>
                         <td>{{ producto.get_TipoProducto_display}}</td>
-                        <td><a href="{% url 'EditarProductoForm' producto.IdProducto %}">Actualizar</a></td>
+                        <td><a href="{% url 'EditarProductoForm' producto.IdProducto %}">Actualizar</a><br>
+                            <a href="{% url 'EliminarProducto' producto.IdProducto %}">Eliminar</a>
+                        </td>
                     </tr>
                 {% endfor %}
+                <tr>
+                    <button><a href="{% url 'NuevoProducto' %}">Nuevo Producto</a></button>
+                </tr>
             </tbody>
         </table>
     </div>
 </body>
+<script>
+    function Enlace() {
+        var Filtro = document.getElementById("id_Producto").value;
+        var Enlace = document.getElementById("EnlaceForm");
+
+        Enlace.href = "{% url 'ProductoFiltrado' id_producto='A1' %}".replace('A1', Filtro);
+    }
+</script>
 </form>
 {% endblock %}

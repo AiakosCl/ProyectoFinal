@@ -29,16 +29,19 @@ urlpatterns = [
     path('login/', views.user_login, name='entrar'),
     path('logout/', views.user_logout, name='salir'),
     path('NuevoUsuario/',views.user_register, name='crear_usuario'),
+    path('EditarUsuario/', views.EditarUsuario.as_view(), name='EditarUsuario'),
     path('productos/<str:tipo_producto>/', views.presentacion, name='ListaProductoFiltrada'),
-    path('NuevoCliente/', views.crear_cliente, name="NuevoCliente"),
+    path('NuevoCliente/', views.crear_cliente, name='NuevoCliente'),
     path('Clientes/', views.ClienteListView.as_view(), name='ListaClientes'),
-    path('Clientes/<str:Id_cliente>/', views.FiltroClientes, name="NominaFiltrada"),
-    path('Clientes/editar/<str:pk>/', views.ClienteUpdateView.as_view(), name='editar_cliente'),
+    path('Clientes/<str:Id_cliente>/', views.FiltroClientes, name='NominaFiltrada'),
+    path('Clientes/editar/<str:pk>/', views.EditarClienteView.as_view(), name='editar_cliente'),
     path('Clientes/eliminar/<str:pk>/', views.EliminarClienteView.as_view(), name='eliminar_cliente'),
-    path('ListaProductos/', views.TablaListView.as_view(), name="TablaProductos"),
+    path('ListaProductos/', views.TablaListView.as_view(), name='TablaProductos'),
     path('ListaProductos/editar/<str:pk>/', views.ProductoEditar.as_view(), name='EditarProductoForm'),
-    
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('NuevoProducto/', views.crear_producto, name='NuevoProducto'),
+    path('ListaProductos/<str:id_producto>/', views.FiltroTablaProductos, name='ProductoFiltrado'),
+    path('Productos/eliminar/<str:pk>', views.EliminarProductoView.as_view(), name = 'EliminarProducto'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
     urlpatterns+=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

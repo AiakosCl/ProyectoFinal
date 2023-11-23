@@ -37,13 +37,13 @@ class Productos(models.Model):
         (True, 'Activo'),
         (False, 'Inactivo')
     )
-    IdProducto = models.CharField(max_length=10, primary_key=True, help_text='Ingrese el Nro. de Modelo')
-    NombreProducto = models.CharField(max_length=50, blank=False, null=False, default='Descripción corta', help_text='Ingrese una descripción breve del producto')
+    IdProducto = models.CharField(max_length=10, primary_key=True)
+    NombreProducto = models.CharField(max_length=50, blank=False, null=False, default='Descripción corta')
     TipoProducto = models.CharField(max_length=1, choices=tipo, null=False, blank=False,default='B')
     ImagenProducto = models.ImageField(upload_to='ImgProducto/',null=False, blank=False)
-    PrecioUnitario = models.DecimalField(max_digits=8, default=0, decimal_places=2, help_text='Ingrese precio unitario neto')
+    PrecioUnitario = models.DecimalField(max_digits=8, default=0, decimal_places=2)
     Stock = models.IntegerField(blank=False, null=False, default=0)
-    Descripcion = RichTextField(blank=True, null=True, help_text='Haga una presentación del producto.')
+    Descripcion = RichTextField(blank=True, null=True)
     EstadoProducto = models.BooleanField(blank=False, null=False, choices=Estados, default=True)
     
 
@@ -79,6 +79,10 @@ class CArritoItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     CodProducto = models.ForeignKey(Productos, on_delete=models.CASCADE)
     Cantidad = models.PositiveIntegerField(default=1)
+    
+
+    
+
 
 
 
