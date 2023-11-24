@@ -1,17 +1,15 @@
 {% extends 'ArteNativo.html' %}
 
 {% block content %}
+<style>
+    #MenuAdm{
+        display: block;
+    }
+</style>
+
+
 <form method="post">
 <body>
-    <nav style="background-color: rgb(1, 89, 46);margin-top: 0.5cm;">
-        <ul>
-            <li><a href="{% url 'ListaClientes' %}">Gestión de Clientes</a></li>
-            <li><a href="{% url 'TablaProductos' %}">Gestión de Productos</a></li>
-            <li><a href="#FormVentas">Gestión de Ventas</a></li>
-            <li><a href="{% url 'ListaUsuarios' %}">Gestión de usuarios</a></li>
-        </ul>
-    </nav>
-
     <form method="post" id="Buscador">
         <h2>Lista Productos</h2>
         <br><br>

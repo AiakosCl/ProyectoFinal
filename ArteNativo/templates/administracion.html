@@ -3,18 +3,9 @@
 
 
 {% block content %}
-
-<body>
-    <nav style="background-color: rgb(1, 89, 46);margin-top: 0.5cm;">
-        <ul>
-            <li><a href="{% url 'ListaClientes' %}">Gestión de Clientes</a></li>
-            <li><a href="{% url 'TablaProductos' %}">Gestión de Productos</a></li>
-            <li><a href="#FormVentas">Gestión de Ventas</a></li>
-            <li><a href="{% url 'ListaUsuarios' %}">Gestión de usuarios</a></li>
-        </ul>
-    </nav>
-
-<!-- Crear distintos contenedores o secciones que carguen los distintos formularios, pero que se vayan mostrando a medida que se seleccione la opción-->
-</body>
-
+<style>
+    #MenuAdm {
+        display: block;
+    }
+</style>
 {% endblock %}

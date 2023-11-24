@@ -1,16 +1,13 @@
 {% extends 'ArteNativo.html' %}
 
 {% block content %}
+<style>
+    #MenuAdm {
+        display: block;
+    }
+</style>
 
 <body>
-    <nav style="background-color: rgb(1, 89, 46);margin-top: 0.5cm;">
-        <ul>
-            <li><a href="{% url 'ListaClientes' %}">Gestión de Clientes</a></li>
-            <li><a href="{% url 'TablaProductos' %}">Gestión de Productos</a></li>
-            <li><a href="#FormVentas">Gestión de Ventas</a></li>
-            <li><a href="{% url 'ListaUsuarios' %}">Gestión de usuarios</a></li>
-        </ul>
-    </nav>
     <h2 style="margin-top: 0,5cm;margin-bottom: 10px;">Usuarios</h2>
     <p style="text-decoration: underline; font-weight: bold;font-size: small;font-style: italic;">Puedes filtrar por Nombre del usuario.</p>
 

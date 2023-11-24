@@ -257,7 +257,7 @@ def user_login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('administracion')
+            return redirect('Base')
         else:
             return render(request, 'login.html', {'error': 'Nombre de usuario o contraseña incorrectos.'})
     return render(request, 'login.html')

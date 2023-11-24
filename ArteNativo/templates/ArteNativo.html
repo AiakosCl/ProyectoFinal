@@ -13,6 +13,10 @@
             display: none;
         }
 
+        #MenuAdm {
+            display:none;
+        }
+
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
@@ -186,8 +190,8 @@
     <body>
         <nav>
             <ul>
-                <li><a href="{% url 'ListaProducto' %}">Inicio</a></li>
-                <li><a onclick="MostrarAcercaDe()">Acerca de</a></li>
+                <li><a href="{% url 'ListaProducto' %}" onclick="OcultarAdm()">Inicio</a></li>
+                <li><a href="#Acercade" onclick="MostrarAcercaDe()">Acerca de</a></li>
                 <li><a href="#contacto">Contacto</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'administracion' %}">Administración</a></li>
@@ -210,6 +214,15 @@
         </header>
 
     <!-- Sección Menú Mostrar Productos-->
+        <nav  id="MenuAdm" style="background-color: rgb(116, 121, 119);margin-top: 0.5cm;">
+            <ul>
+                <li><a href="{% url 'ListaClientes' %}">Gestión de Clientes</a></li>
+                <li><a href="{% url 'TablaProductos' %}">Gestión de Productos</a></li>
+                <li><a href="#FormVentas">Gestión de Ventas</a></li>
+                <li><a href="{% url 'ListaUsuarios' %}">Gestión de usuarios</a></li>
+            </ul>
+        </nav>
+
         <section id="formularios">
 
             <div id="Contenido">
@@ -245,6 +258,20 @@
                 EstadoSeccion.style.display=(EstadoSeccion.style.display === "block") ? "none": "block";
             }
         </script>
-       
+        <script>
+            function OcultarAdm() {
+                var EstadoMenu = document.getElementById("MenuAdm");
+
+                EstadoMenu.style.display='none';
+            }
+        </script>
+        <script>
+            function MostrarAdm() {
+                var EstadoMenu = document.getElementById("MenuAdm");
+
+                EstadoMenu.style.display='block';
+                }
+         </script>
+
     </body>
 </html>

@@ -27,6 +27,10 @@
         border-radius: 8px;
         width: 90%;
     }
+    
+    #MenuAdm {
+        display: block;
+    }
 </style>
 <div id="contenedor-formulario">
     <form method="post" enctype="multipart/form-data">
@@ -39,8 +43,8 @@
             </tr>
             <tr>
                 <td><p style="font-weight: bold;">Acciones --></p></td>
-                <td style="text-align: center;"><button type="submit" style="background-color: green;">Guardar Cambios</button>
-                    <button><a href="{% url 'TablaProductos' %}"></a>Volver a la Lista -></button></td>
+                <td style="text-align: center;"><button class="btn-guardar" type="submit">Guardar Cambios</button>
+                    <button class="btn-comun"><a href="{% url 'TablaProductos' %}">Volver a la Lista</a></button></td>
             </tr>
         </table>
     </form>
