@@ -2,36 +2,23 @@
 
 {% block content %}
 <style>
-    div {
-        width: 100%;
-        display: flexbox;
-        align-items: center;
-        justify-content: center;
-        border-radius: 8px;
-        border-color: red;
-        border-style: dashed;
-    }
-
-    button {
-        width: 300px;
-    }
 
     table {
         width: 100%;
     }
 </style>
-<div>
+<div style="border: 1; border-radius: 8px; border-style: dotted; border-color: red;">
     <h2>Eliminar Cliente</h2>
     </br></br>
-    <p>¿Estás seguro de que deseas eliminar al cliente {{ cliente.Nombres }} {{ cliente.ApPaterno }}?</p>
+    <p>¿Estás seguro de que deseas eliminar al cliente <span style="font-weight: bolder;font-style: italic;color: blue;">{{ cliente.Nombres }} {{ cliente.ApPaterno }}</span> ?</p>
 
     <form method="post">
         {% csrf_token %}
     </br></br>
         <table>
             <tr>
-                <td><button type="submit" style="background-color: red;">SÍ - Eliminar registro</button></td>
-                <td><button><a href="{% url 'ListaClientes' %}">NO - Volver a la lista</a></button></td>
+                <td><button type="submit" class="btn-advertencia">SÍ - Eliminar registro</button></td>
+                <td><button class="btn-comun"><a href="{% url 'ListaClientes' %}">NO - Volver a la lista</a></button></td>
             </tr>
         </table>
 

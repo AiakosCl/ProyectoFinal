@@ -8,7 +8,7 @@
             <li><a href="{% url 'ListaClientes' %}">Gestión de Clientes</a></li>
             <li><a href="{% url 'TablaProductos' %}">Gestión de Productos</a></li>
             <li><a href="#FormVentas">Gestión de Ventas</a></li>
-            <li><a href="#FormUsuarios">Gestión de usuarios</a></li>
+            <li><a href="{% url 'ListaUsuarios' %}">Gestión de usuarios</a></li>
         </ul>
     </nav>
 
@@ -56,7 +56,7 @@
                     </tr>
                 {% endfor %}
                 <tr>
-                    <button><a href="{% url 'NuevoProducto' %}">Nuevo Producto</a></button>
+                    <button class="btn-comun"><a href="{% url 'NuevoProducto' %}">Nuevo Producto</a></button>
                 </tr>
             </tbody>
         </table>

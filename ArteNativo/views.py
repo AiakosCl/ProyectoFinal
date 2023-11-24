@@ -59,10 +59,21 @@ def FiltroClientes(request, Id_cliente=None):
     if Id_cliente:
         clientes = Clientes.objects.filter(IdCliente__startswith = Id_cliente)
     else:
-        clientes = Productos.objects.all()
+        clientes = Clientes.objects.all()
     
     context = {'NominaClientes': clientes}
     return render(request, 'ListaClientes.html', context)
+
+@login_required
+def FiltroUsuario(request, nombre=None):
+    print(nombre)
+    if nombre:
+        usuarios = User.objects.filter(first_name__startswith = nombre)
+    elif nombre==None:
+        usuarios = User.objects.all()
+    
+    context = {'ListaUsuarios': usuarios}
+    return render(request, 'ListaUsuarios.html', context)
 
 @login_required
 def FiltroTablaProductos(request, id_producto=None):
@@ -74,7 +85,10 @@ def FiltroTablaProductos(request, id_producto=None):
     Contexto = {'ListadeProductos': ListaFiltadaProductos}
     return render(request, 'TablaProductos.html', Contexto)
 
-
+class ListaUsuariosView(LoginRequiredMixin, ListView):
+    model = User
+    template_name='ListaUsuarios.html'
+    context_object_name ="ListaUsuarios"
 
 
 # Vistas para crear Clientes, Productos, Ventas, etc.
@@ -198,7 +212,7 @@ class EliminarClienteView(LoginRequiredMixin,View):
         return redirect('ListaClientes')
 
 class ProductoEditar(LoginRequiredMixin, UpdateView): #Revisar si se programa la vista como View
-    model =Productos
+    model = Productos
     template_name = 'Form_Productos.html'
     form_class = ProductoForm
     success_url = reverse_lazy('TablaProductos')
@@ -216,6 +230,18 @@ class EliminarProductoView(LoginRequiredMixin,View):
         messages.warning(request, f'Se ha eliminado el producto: {ProductoEliminar.NombreProducto}.')
         return redirect('TablaProductos')
 
+class EliminarUsuarioView(LoginRequiredMixin,View):
+    template_name = 'EliminarUsuario.html'
+
+    def get(self, request, pk, *args, **kwargs):
+        UsuarioEliminar = get_object_or_404(User, pk=pk)
+        return render(request, self.template_name, {'usuario': UsuarioEliminar})
+
+    def post(self, request, pk, *args, **kwargs):
+        UsuarioEliminar = get_object_or_404(User, pk=pk)
+        UsuarioEliminar.delete()
+        messages.warning(request, f'Se ha eliminado el usuario: {UsuarioEliminar.username}.')
+        return redirect('ListaUsuarios')
     
 
 
@@ -244,19 +270,16 @@ def user_logout(request):
 @login_required(login_url='entrar')
 def user_register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CrearUsuarioForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('entrar')
     else:
-        form = UserCreationForm()
+        form = CrearUsuarioForm()
     return render(request, 'Form_Usuario.html', {'form': form})
 
 class EditarUsuario(LoginRequiredMixin, UpdateView):
     model = User
     form_class = EditarUsuarioForm
     template_name = 'Form_Usuario.html'
-    success_url = reverse_lazy('administracion')
-
-    def get_object(self, queryset=None):
-        return self.request.user
+    success_url = reverse_lazy('entrar')

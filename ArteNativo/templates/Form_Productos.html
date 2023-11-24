@@ -1,7 +1,7 @@
 {% extends 'ArteNativo.html' %}
 
 {% block content %}
-<script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
+<!--<script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>-->
 
 <style>
     table {
@@ -32,9 +32,9 @@
     <form method="post" enctype="multipart/form-data">
         <h2 style="font-style: italic;">Formulario Productos</br></br></h2>
         {% csrf_token %}
+        {{form.media}}
         <table border="1">
             <tr>
-                <td><img src='{{producto.ImagenProducto.url}}' alt="Imagen referencial"></td>
                 <td>{{ form.as_table }}</td>
             </tr>
             <tr>
@@ -47,9 +47,9 @@
     </br>
 </div>
 
-<script>
+<!--<script>
     document.addEventListener('DOMContentLoaded', function () {
         CKEDITOR.replaceAll();
     });
-</script>
+</script>-->
 {% endblock %}

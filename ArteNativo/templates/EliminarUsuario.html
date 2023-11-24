@@ -5,7 +5,7 @@
 <div style="border: 1; border-radius: 8px; border-style: dotted; border-color: red;">
     <h2>Eliminar Producto</h2>
     </br></br>
-    <p>¿Estás seguro de que deseas eliminar producto <span style="font-weight: bolder;font-style: italic;">{{ producto.IdProducto }} - {{ producto.NombreProducto }}</span> ?</p>
+    <p>¿Estás seguro de que deseas eliminar producto <span style="font-weight: bolder;font-style: italic;">{{ usuario.username }} - {{ usuario.first_name }} {{usuario.last_name}}</span> ?</p>
 
     <form method="post">
         {% csrf_token %}
@@ -13,7 +13,7 @@
         <table style="width: 100%;">
             <tr>
                 <td><button type="submit" class="btn-advertencia">SÍ - Eliminar registro</button></td>
-                <td><button class="btn-comun"><a href="{% url 'TablaProductos' %}">NO - Volver a la lista</a></button></td>
+                <td><button class="btn-comun"><a href="{% url 'ListaUsuarios' %}">NO - Volver a la lista</a></button></td>
             </tr>
         </table>
     </form>

@@ -1,0 +1,74 @@
+{% extends 'ArteNativo.html' %}
+
+{% block content %}
+
+<body>
+    <nav style="background-color: rgb(1, 89, 46);margin-top: 0.5cm;">
+        <ul>
+            <li><a href="{% url 'ListaClientes' %}">Gestión de Clientes</a></li>
+            <li><a href="{% url 'TablaProductos' %}">Gestión de Productos</a></li>
+            <li><a href="#FormVentas">Gestión de Ventas</a></li>
+            <li><a href="{% url 'ListaUsuarios' %}">Gestión de usuarios</a></li>
+        </ul>
+    </nav>
+    <h2 style="margin-top: 0,5cm;margin-bottom: 10px;">Usuarios</h2>
+    <p style="text-decoration: underline; font-weight: bold;font-size: small;font-style: italic;">Puedes filtrar por Nombre del usuario.</p>
+
+    <!-- Barra de filtros para la lista de Clientes -->
+    <form method="post">
+        {% csrf_token %}
+        <input id="NombreUsuario" type="text" name="nombre_usuario" placeholder="Nombre" onchange="Enlace()" style="font-size: large;">
+        <p id="visor"></p>
+        <p><a id="EnlaceForm" href="{% url 'UsuariosFiltrados' nombre='.' %}">Filtrar</a></p>
+    </form>
+    
+    <!-- Entregará el mensaje de confirmación de la creación o edición del registro- Cliente -->
+    {% if messages %}
+    <ul class="messages">
+    {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+
+    <!-- Tabla que mostrará la lista de clientes con las opciones de editar y eliminar por línea -->
+    <table border="1"; style="width: 100%;">
+        <thead>
+            <tr>
+                <th>Nombre de Usuario</th>
+                <th>Nombres</th>
+                <th>Apellido</th>
+                <th>Correo</th>
+                <th>Acciones</th> <!-- Nueva columna para acciones -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in ListaUsuarios %}
+            <tr>
+                <td>{{ usuario.username }}</td>
+                <td>{{ usuario.first_name }}</td>
+                <td>{{ usuario.last_name }}</td>
+                <td>{{ usuario.email }}</td>
+                <td>
+                    <a href="{% url 'EditarUsuario' usuario.id %}">Editar</a></br>
+                    <a href="{% url 'EliminarUsuario' usuario.id %}">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+            <tr><button class=" btn-comun"style="margin-bottom: 10px; margin-top: 10px;"><a href="{% url 'crear_usuario' %}">Nuevo Usuario</a></button></tr>
+        </tbody>
+    </table>
+    
+    <script>
+        //Esta función modifica el atributo href de la acción <a id=EnlaceForm>
+        function Enlace() {
+            var filtro = document.getElementById("NombreUsuario").value;
+            var Enlace = document.getElementById("EnlaceForm");
+
+            Enlace.href = "{% url 'UsuariosFiltrados' nombre='.' %}".replace('.',filtro);
+        }
+    </script>
+
+</body>
+
+{% endblock %}

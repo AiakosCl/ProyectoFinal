@@ -1,6 +1,7 @@
 from django import forms
 from .models import *
 from ckeditor.widgets import CKEditorWidget
+from django.contrib.auth.forms import *
 
 class ClienteForm(forms.ModelForm):
     class Meta:
@@ -54,8 +55,12 @@ class EditarUsuarioForm(forms.ModelForm):
     class Meta:
         model = User
         fields =['username','password','email','first_name','last_name','is_active','is_staff','is_superuser']
+        widgets ={
+            'passowrd':forms.PasswordInput,
+        }
         labels = {
             'username':'Nombre de Usuario',
+            'password':'Contraseña',
             'email':'Correo electrónico',
             'first_name': 'Nombre',
             'last_name': 'Apellido',
@@ -64,3 +69,24 @@ class EditarUsuarioForm(forms.ModelForm):
             'is_superuser': 'Administrador?'
         }
         
+        help_texts = {k:"" for k in fields}
+        
+class UserEditionForm(UserChangeForm):
+    password = None
+    email = forms.EmailField(label = "Correo Electrónico:")
+    last_name = forms.CharField(label = "Apellido:")
+    first_name = forms.CharField(label = "Nombre:")
+    
+    class Meta:
+        model = User
+        fields = ['email', 'last_name', 'first_name']
+
+class CrearUsuarioForm(UserCreationForm):
+    username = forms.CharField(label="Nombre de Usuario:")
+    email = forms.EmailField(label="Correo electrónico:")
+    password1 = forms.CharField(label = "Contraseña:", widget=forms.PasswordInput)
+    password2 = forms.CharField(label="Repetir Contraseña:", widget=forms.PasswordInput)
+    class Meta:
+        model = UserModel
+        fields = ['username', 'email', 'password1', 'password2']
+        help_texts = {k:"" for k in fields}

@@ -1,14 +1,22 @@
 {% extends "ArteNativo.html" %}
 
 {% block content %}
-    <h1>Formualario Usuario</h1>
+
+    <h1>Formulario Usuario</h1><br>
     <form method="post">
         {% csrf_token %}
-        <table>
-            {{ form.as_table }}
-        </table>
-
-        <button type="submit">Guardar Cambios</button>
+        <div style="width: 100%;display: flex;justify-content: center;align-items: center;">
+            <table style="text-align: left;background-color: azure;">
+                <tr>
+                    <td>{{ form.as_table }}</td>
+                </tr>
+                <tr>
+                    <td><button class ="btn-guardar" type="submit">Guardar Cambios</button></td>
+                    <td><button class="btn-comun"><a href="{% url 'ListaUsuarios' %}">Volver</a></button></td>
+                </tr>
+            </table>
+        </div>
     </form>
+    <br>
     <a href="{% url 'entrar' %}">Iniciar Sesión</a>
 {% endblock %}
